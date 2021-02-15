@@ -1,5 +1,8 @@
+mod recovable_errors;
+
 fn main() {
-    panic!("Major error!");
+    recovable_errors::run();
+    //panic!("Major error!");
 }
 
 /*
