@@ -1,8 +1,12 @@
 mod recovable_errors;
 
-fn main() {
+use std::error::Error;
+
+fn main() -> Result<(), Box<dyn Error>> {
     recovable_errors::run();
     //panic!("Major error!");
+
+    Ok(())
 }
 
 /*
