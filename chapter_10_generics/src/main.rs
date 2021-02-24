@@ -7,7 +7,7 @@ fn main() {
     traits::run();
     lifetimes::run();
 
-    // beginning();
+    beginning();
 }
 
 fn beginning() {
@@ -25,6 +25,10 @@ fn beginning() {
 
     let second_largest = largest_number(&number_list);
     println!("{}", second_largest);
+
+    let x = largest_better(&number_list);
+
+    println!("{}", x);
 }
 
 fn largest_number(number_list: &Vec<i32>) -> &i32 {
@@ -40,7 +44,7 @@ fn largest_number(number_list: &Vec<i32>) -> &i32 {
 }
 
 //this is a better implementation as it takes any concrete slice of i32 values
-fn largest(number_list: &[i32]) -> &i32 {
+fn largest_better(number_list: &[i32]) -> &i32 {
     let mut largest_number = &number_list[0];
 
     for number in number_list {
