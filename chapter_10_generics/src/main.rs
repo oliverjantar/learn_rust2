@@ -7,7 +7,7 @@ fn main() {
     traits::run();
     lifetimes::run();
 
-    beginning();
+    //beginning();
 }
 
 fn beginning() {
