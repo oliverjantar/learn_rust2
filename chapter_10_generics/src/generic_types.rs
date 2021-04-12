@@ -31,7 +31,7 @@ fn largest_char(list: &[char]) -> &char {
     }
     largest
 }
-
+/*
 fn largest<T>(list: &[T]) -> &T {
     let mut largest = &list[0];
 
@@ -42,6 +42,7 @@ fn largest<T>(list: &[T]) -> &T {
     }
     largest
 }
+*/
 
 struct Point<T> {
     x: T,
