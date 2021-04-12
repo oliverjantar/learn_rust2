@@ -31,8 +31,13 @@ fn largest_char(list: &[char]) -> &char {
     }
     largest
 }
-/*
-fn largest<T>(list: &[T]) -> &T {
+
+//use std::cmp::PartialOrd;
+
+fn largest<T>(list: &[T]) -> &T
+where
+    T: PartialOrd,
+{
     let mut largest = &list[0];
 
     for item in list {
@@ -42,7 +47,6 @@ fn largest<T>(list: &[T]) -> &T {
     }
     largest
 }
-*/
 
 struct Point<T> {
     x: T,
