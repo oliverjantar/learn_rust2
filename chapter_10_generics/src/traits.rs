@@ -99,3 +99,30 @@ impl<T> Pair<T> {
         Self { x, y }
     }
 }
+
+fn run_pair() {
+    let pair = Pair::new(4, 8);
+}
+
+trait TraitNew {
+    fn new(text: String) -> Self;
+
+    fn get_text(&self) -> &str;
+}
+
+fn print_text(item: &impl TraitNew) {
+    println!("{}", item.get_text());
+}
+
+struct Text {
+    text: String,
+}
+
+impl TraitNew for Text {
+    fn new(text: String) -> Self {
+        Self { text }
+    }
+    fn get_text(&self) -> &str {
+        &self.text
+    }
+}
