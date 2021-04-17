@@ -1,7 +1,7 @@
 mod guess;
 mod rectangle;
 
-fn add_two(x: i32) -> i32 {
+pub fn add_two(x: i32) -> i32 {
     x + 2
 }
 
@@ -29,6 +29,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn greetings_contain_name() {
         let result = greetings("Maky");
         assert!(
