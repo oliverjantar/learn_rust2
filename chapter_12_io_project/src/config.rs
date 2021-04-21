@@ -26,7 +26,7 @@ mod tests {
     fn config_new_returns_err() {
         let x = [String::from("test")];
         let result = Config::new(&x).unwrap_err();
-        assert_eq!(result, "Not enough arguments!c");
+        assert_eq!(result, "Not enough arguments!");
     }
 
     #[test]

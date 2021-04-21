@@ -6,14 +6,11 @@ use chapter_12_io_project::Config;
 // cargo run banish C:/Users/admin/Desktop/temp/poem.txt
 fn main() {
     let args: Vec<String> = env::args().collect();
-    println!("{:?}", args);
 
     let config = Config::new(&args).unwrap_or_else(|err| {
         println!("Problem parsing arguments: {}", err);
         process::exit(1);
     });
-
-    println!("query: {}, filename: {}", config.query, config.filename);
 
     //better than unwrap_or_else as we don't use the return value
     if let Err(e) = chapter_12_io_project::run(config) {
