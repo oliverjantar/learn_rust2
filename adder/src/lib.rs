@@ -2,7 +2,9 @@ mod guess;
 mod rectangle;
 
 pub fn add_two(x: i32) -> i32 {
+    let x = 2;
     x + 2
+
 }
 
 fn greetings(param: &str) -> String {
