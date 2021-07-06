@@ -5,8 +5,10 @@ use std::thread;
 use std::time::Duration;
 
 pub fn run() {
-    run_example1();
-    test_cacher();
+    // run_example1();
+    // test_cacher();
+    // try_cacher3();
+    capture_body();
 }
 
 fn run_example1() {
@@ -185,15 +187,48 @@ where
     }
     fn value(&mut self, arg: V) -> &V {
         if self.map.contains_key(&arg) {
+            println!("returning value without calculation");
             if let Some(v) = self.map.get(&arg) {
                 &v
             } else {
                 panic!("");
             }
         } else {
+            println!("calculating and returnign value");
             let v = (self.calculation)(arg.clone());
             self.map.insert(arg.clone(), v);
             self.map.get(&arg).unwrap()
         }
     }
+}
+
+fn try_cacher3() {
+    let mut x = Cacher_3::new(|num| num);
+
+    let result1 = x.value(5);
+    println!("result1 {}", result1);
+
+    let result2 = x.value(5);
+    println!("result2 {}", result2);
+
+    let result3 = x.value(7);
+    println!("result3 {}", result3);
+
+    let result4 = x.value(5);
+    println!("result4 {}", result4);
+
+    let result5 = x.value(7);
+    println!("result5 {}", result5);
+}
+
+fn capture_body() {
+    let x = 5;
+
+    let equal_to_x = |z| z == x;
+
+    let mut y = 4;
+
+    y += 1;
+
+    println!("equal to x is: {}", equal_to_x(y));
 }
