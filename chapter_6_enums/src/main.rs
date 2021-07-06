@@ -10,6 +10,7 @@ fn main() {
     y.print_type_4(); //won't print anything
 }
 
+#[derive(Debug)]
 struct Ipv4Addr();
 
 impl Ipv4Addr {
@@ -17,6 +18,8 @@ impl Ipv4Addr {
         println!("call from Ipv4Addr");
     }
 }
+
+#[derive(Debug)]
 struct Ipv6Addr();
 
 impl Ipv6Addr {
@@ -24,6 +27,7 @@ impl Ipv6Addr {
         println!("call from Ipv6Addr");
     }
 }
+
 #[derive(Debug)]
 enum IpAddr {
     V4(Ipv4Addr),
