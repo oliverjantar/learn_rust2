@@ -1,5 +1,6 @@
 use core::panic;
 use std::collections::HashMap;
+use std::fmt::Display;
 use std::hash::Hash;
 use std::thread;
 use std::time::Duration;
@@ -7,8 +8,10 @@ use std::time::Duration;
 pub fn run() {
     // run_example1();
     // test_cacher();
-    // try_cacher3();
-    capture_body();
+    //try_cacher3();
+    // capture_body();
+
+    run_ultimate_cacher();
 }
 
 fn run_example1() {
@@ -200,6 +203,55 @@ where
             self.map.get(&arg).unwrap()
         }
     }
+}
+
+struct Cacher4<T, U, V>
+where
+    T: Fn(&U) -> V,
+    U: Hash + Eq + Clone,
+{
+    calculation: T,
+    map: HashMap<U, V>,
+}
+
+impl<T, U, V> Cacher4<T, U, V>
+where
+    T: Fn(&U) -> V,
+    U: Hash + Eq + Clone + Display,
+{
+    fn new(calculation: T) -> Cacher4<T, U, V> {
+        Cacher4 {
+            calculation,
+            map: HashMap::new(),
+        }
+    }
+
+    fn value(&mut self, arg: U) -> &V {
+        if !self.map.contains_key(&arg) {
+            println!("Inserting value {}", arg);
+            let value = (self.calculation)(&arg);
+            self.map.insert(arg.clone(), value);
+        }
+        self.map.get(&arg).unwrap()
+    }
+}
+
+fn run_ultimate_cacher() {
+    let closure = |num: &i32| {
+        let x = num + 6;
+        format!("result of calculation is: {}", x)
+    };
+
+    let mut cacher = Cacher4::new(closure);
+
+    let result1 = cacher.value(5);
+    println!("result1 {:?}", result1);
+
+    let result2 = cacher.value(5);
+    println!("result2 {:?}", result2);
+
+    let result3 = cacher.value(7);
+    println!("result3 {:?}", result3);
 }
 
 fn try_cacher3() {
