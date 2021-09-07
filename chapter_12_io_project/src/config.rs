@@ -1,3 +1,4 @@
+use core::panic;
 use std::env;
 
 #[derive(Debug)]
@@ -8,13 +9,18 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &str> {
-        if args.len() < 3 {
-            return Err("Not enough arguments!");
-        }
+    pub fn new(mut args: impl Iterator<Item = String>) -> Result<Config, &'static str> {
+        args.next(); //name of a program is always the first parameter
 
-        let query = args[1].clone();
-        let filename = args[2].clone();
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get query parameter"),
+        };
+
+        let filename = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get filename parameter"),
+        };
 
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
@@ -33,21 +39,25 @@ mod tests {
 
     #[test]
     fn config_new_returns_err() {
-        let x = [String::from("test")];
-        let result = Config::new(&x).unwrap_err();
-        assert_eq!(result, "Not enough arguments!");
+        let x = vec![String::from("test")];
+        let result = Config::new(x.into_iter()).unwrap_err();
+        assert_eq!(result, "Didn't get query parameter");
+
+        let x = vec![String::from("test"), String::from("query")];
+        let result = Config::new(x.into_iter()).unwrap_err();
+        assert_eq!(result, "Didn't get filename parameter");
     }
 
     #[test]
     fn creates_new_config() {
-        let x = [
+        let x = vec![
             String::from("not used param"),
             String::from("query"),
             String::from("filename"),
         ];
-        let result = Config::new(&x).unwrap();
+        let result = Config::new(x.into_iter()).unwrap();
 
-        assert_eq!(result.filename, x[2]);
-        assert_eq!(result.query, x[1]);
+        assert_eq!(result.query, String::from("query"));
+        assert_eq!(result.filename, String::from("filename"));
     }
 }

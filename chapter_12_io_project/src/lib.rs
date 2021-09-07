@@ -14,13 +14,15 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn search<'a>(query: &str, text: &'a str) -> Vec<&'a str> {
-    let mut result: Vec<&str> = Vec::new();
-    for line in text.lines() {
-        if line.contains(query) {
-            result.push(line);
-        }
-    }
-    result
+    // let mut result: Vec<&str> = Vec::new();
+    // for line in text.lines() {
+    //     if line.contains(query) {
+    //         result.push(line);
+    //     }
+    // }
+    // result
+
+    text.lines().filter(|line| line.contains(query)).collect() //easier when using iterators
 }
 
 #[cfg(test)]
