@@ -1,7 +1,7 @@
 mod boxing;
-mod rc;
+mod reference_counter;
 
 fn main() {
     // boxing::run();
-    rc::run();
+    reference_counter::run();
 }
