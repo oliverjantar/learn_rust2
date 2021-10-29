@@ -16,7 +16,7 @@ fn create_channel() {
             String::from("you?"),
         ];
 
-        for i in messages {
+        for i in messages.into_iter() {
             tx1.send(i).unwrap_or_else(|err| {
                 println!("Thread 1: Error while sending message to channel {}", err);
             });
@@ -27,7 +27,7 @@ fn create_channel() {
     let handle2 = thread::spawn(move || {
         let values = vec![1, 2, 3, 4, 5, 6, 7, 8];
 
-        for i in values {
+        for i in values.into_iter() {
             tx.send(i.to_string()).unwrap_or_else(|err| {
                 println!("Thread 2: Error {}", err);
             });
