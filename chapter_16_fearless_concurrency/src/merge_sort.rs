@@ -69,7 +69,7 @@ pub fn run() {
         let _tx = tx.clone();
 
         handles.push(thread::spawn(move || {
-            let sorted = array_chunk;
+            let sorted = sort(array_chunk);
 
             println!("sending data from thread {}", i);
             _tx.send(sorted)
@@ -79,14 +79,35 @@ pub fn run() {
     drop(tx);
     let mut sorted: Vec<i32> = Vec::new();
     for data in rx {
-        println!("sorted data {:?}", data);
+        sorted = merge(sorted, data);
+        println!("sorted data {:?}", sorted);
     }
 
     for t in handles {
         t.join().unwrap();
     }
+    println!("result is {:?}", sorted);
 }
 
-fn merge() {}
+fn sort(items: Vec<i32>) -> Vec<i32> {
+    if items.len() == 1 {
+        return items;
+    }
 
-fn devide() {}
+    let middle = items.len() / 2;
+
+    let left = &items[..middle];
+    let right = &items[middle..];
+
+    println!("left {:?}, right {:?}", left, right);
+
+    let left_sorted = sort(left.to_vec());
+    let right_sorted = sort(right.to_vec());
+    merge(left_sorted, right_sorted)
+}
+
+fn merge(mut left: Vec<i32>, mut right: Vec<i32>) -> Vec<i32> {
+    left.append(&mut right);
+    left.sort();
+    left
+}

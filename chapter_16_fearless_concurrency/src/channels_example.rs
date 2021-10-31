@@ -1,7 +1,9 @@
 pub fn run() {
-    create_channel();
+    // create_channel();
+    example_channel_with_threads();
 }
 
+use rand::prelude::*;
 use std::{sync::mpsc, thread, time::Duration};
 
 fn create_channel() {
@@ -43,4 +45,35 @@ fn create_channel() {
 
     handle.join().unwrap();
     handle2.join().unwrap();
+}
+
+fn example_channel_with_threads() {
+    let (tx, rx) = mpsc::channel();
+
+    let mut handles = vec![];
+
+    for i in 1..8 {
+        let _tx = tx.clone();
+        handles.push(thread::spawn(move || {
+            let random = thread_rng().gen_range(1..10);
+
+            thread::sleep(Duration::from_secs(random));
+
+            println!("Thread {} sending message", i);
+
+            _tx.send(format!("thread {} waiting {} secs", i, random))
+                .unwrap();
+        }));
+    }
+
+    drop(tx);
+
+    for msg in rx {
+        println!("Receiving msg: {}", msg);
+    }
+
+    println!("waiting for threads");
+    for x in handles {
+        x.join().unwrap();
+    }
 }
