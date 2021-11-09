@@ -1,4 +1,4 @@
-use std::{cell::RefCell, fs::OpenOptions, rc::Rc};
+use std::{cell::RefCell, rc::Rc};
 
 #[derive(Debug)]
 struct LinkedList {
