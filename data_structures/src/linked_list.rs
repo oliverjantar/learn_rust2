@@ -29,6 +29,8 @@ struct Node {
 
 #[cfg(test)]
 mod tests {
+    use std::borrow::Cow;
+
     use super::*;
 
     #[test]
@@ -42,9 +44,11 @@ mod tests {
             next: Some(Rc::new(RefCell::new(node_none))),
         };
 
-        let tail_value = (*node1.next.unwrap().borrow_mut()).value.clone();
+        let b = (*node1.next.unwrap().borrow()).value.clone();
 
-        assert_eq!(tail_value, "this is the end".to_owned());
+        let tail_value = Cow::from(&b);
+
+        assert_eq!(tail_value, "this is the end");
     }
 
     #[test]
