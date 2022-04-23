@@ -1,7 +1,7 @@
 use std::cell::{Ref, RefCell};
 use std::rc::Rc;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct Node {
     pub next: Vec<Option<Rc<RefCell<Node>>>>,
     pub offset: u64,
@@ -21,7 +21,7 @@ impl Node {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct SkipList {
     head: Option<Rc<RefCell<Node>>>,
     tails: Vec<Option<Rc<RefCell<Node>>>>,
@@ -73,6 +73,39 @@ impl SkipList {
             length: 0,
         }
     }
+
+    pub fn find(&self, offset: u64) -> Option<String> {
+        match self.head {
+            Some(ref head) => {
+                let mut start_level = self.max_level;
+                let node = head.clone();
+
+                let mut result = None;
+                loop {
+                    if node.borrow().next[start_level].is_some() {
+                        break;
+                    }
+                    start_level -= 1;
+                }
+                let mut n = node;
+                for level in (0..=start_level).rev() {
+                    loop {
+                        let next = n.clone();
+                        match next.borrow().next[level] {
+                            Some(ref next) if next.borrow().offset <= offset => n = next.clone(),
+                            _ => break,
+                        };
+                    }
+                    if n.borrow().offset == offset {
+                        result = Some(n.borrow().command.clone());
+                        break;
+                    }
+                }
+                result
+            }
+            None => None,
+        }
+    }
 }
 
 #[cfg(test)]
@@ -82,12 +115,21 @@ mod tests {
 
     #[test]
     pub fn test1() {
-        let mut list = SkipList::new(2);
+        let mut list = SkipList::new(6);
 
         list.append(1, String::from("test1"));
         list.append(2, String::from("test2"));
         list.append(3, String::from("test3"));
+        list.append(4, String::from("test4"));
+        list.append(5, String::from("test5"));
+        list.append(6, String::from("test6"));
+
+        let x = list.find(3);
+
+        assert_eq!(x, Some(String::from("test3")));
 
         //assert_eq!(list.head,Some(Rc::new(RefCell::new(
+
+        //  println!("{:?}", list.tails);
     }
 }
