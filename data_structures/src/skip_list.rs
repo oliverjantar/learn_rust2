@@ -132,4 +132,17 @@ mod tests {
 
         //  println!("{:?}", list.tails);
     }
+
+    #[test]
+    pub fn test2() {
+        let x = 35;
+        let y = 35 >> 1;
+        let z = 35 << 1;
+        println!("{}", y);
+        println!("{}", z);
+        println!("{}", 3 >> 1);
+        println!("{}", usize::MAX);
+        //  let z = usize::MAX + 10;
+        //  println!("{}", z);
+    }
 }
