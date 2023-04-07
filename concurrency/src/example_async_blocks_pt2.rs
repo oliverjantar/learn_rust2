@@ -27,9 +27,7 @@ async fn many_requests(requests: Vec<(String, u16, String)>) -> Vec<std::io::Res
     let mut handles = vec![];
 
     for (host, port, path) in requests {
-        // Since this is an async move block, its future takes ownership of the String values host and path.
-        // It then passes references to cheapo_request.
-        // spawn_local requires Future that is 'static, so we need to use async move block
+        // spawn_local requires Future to be 'static. That is what async block is
         handles.push(task::spawn_local(cheapo_request(&host, port, &path)));
     }
 
