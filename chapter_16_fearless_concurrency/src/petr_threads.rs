@@ -19,10 +19,10 @@ fn main() {
     //     println!("{0}", x);
     //     std::thread::sleep(Duration::from_secs(1));
     // });
-    let w = std::thread::spawn(move || loop {
-        c_b.borrow_mut().inc();
-        std::thread::sleep(Duration::from_secs(1));
-    });
+    // let w = std::thread::spawn(move || loop {
+    //     c_b.borrow_mut().inc();
+    //     std::thread::sleep(Duration::from_secs(1));
+    // });
 }
 
 pub fn run() {
