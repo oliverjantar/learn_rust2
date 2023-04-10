@@ -22,3 +22,25 @@ pub enum FromServer {
     },
     Error(String),
 }
+
+#[test]
+fn test_from_client_json() {
+    use std::sync::Arc;
+
+    let from_client = FromClient::Post {
+        group_name: Arc::new("Group 1".to_string()),
+        message: Arc::new("Hello to all!".to_string()),
+    };
+
+    let json = serde_json::to_string(&from_client).unwrap();
+
+    assert_eq!(
+        json,
+        r#"{"Post":{"group_name":"Group 1","message":"Hello to all!"}}"#
+    );
+
+    assert_eq!(
+        serde_json::from_str::<FromClient>(&json).unwrap(),
+        from_client
+    );
+}
