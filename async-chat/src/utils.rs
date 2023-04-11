@@ -1,4 +1,5 @@
 use async_std::prelude::*;
+use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::error::Error;
 use std::marker::Unpin;
@@ -15,4 +16,16 @@ where
     json.push('\n');
     outbound.write_all(json.as_bytes()).await?;
     Ok(())
+}
+
+pub fn receive_as_json<S, P>(inbound: S) -> impl Stream<Item = ChatResult<P>>
+where
+    S: async_std::io::BufRead + Unpin,
+    P: DeserializeOwned, //P needs to outlive buffers we parsed them from. That's why we aren't using standard Deserialize trait
+{
+    inbound.lines().map(|line_result| -> ChatResult<P> {
+        let line = line_result?;
+        let parsed = serde_json::from_str::<P>(&line)?;
+        Ok(parsed)
+    })
 }
