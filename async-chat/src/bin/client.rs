@@ -26,6 +26,8 @@ async fn send_commands(mut to_server: net::TcpStream) -> ChatResult<()> {
             None => continue,
         };
 
+        println!("request: {:?}", request);
+
         utils::send_as_json(&mut to_server, &request).await?;
         to_server.flush().await?;
     }
@@ -34,10 +36,22 @@ async fn send_commands(mut to_server: net::TcpStream) -> ChatResult<()> {
 
 //todo: this is not ready
 fn parse_command(line: &str) -> Option<FromClient> {
-    Some(FromClient::Post {
-        group_name: Arc::new("test".to_string()),
-        message: Arc::new("test msg".to_string()),
-    })
+    match line.split_once(' ') {
+        None => None,
+        Some((cmd, suffix)) => match cmd {
+            "join" => Some(FromClient::Join {
+                group_name: Arc::new(suffix.to_string()),
+            }),
+            "post" => match suffix.split_once(' ') {
+                None => None,
+                Some((group, message)) => Some(FromClient::Post {
+                    group_name: Arc::new(group.to_string()),
+                    message: Arc::new(message.to_string()),
+                }),
+            },
+            _ => None,
+        },
+    }
 }
 
 async fn handle_replies(from_server: net::TcpStream) -> ChatResult<()> {
