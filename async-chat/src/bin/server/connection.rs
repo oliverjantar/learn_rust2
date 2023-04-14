@@ -15,7 +15,7 @@ impl Outbound {
         Outbound(Mutex::new(to_client))
     }
 
-    async fn send(&self, packet: FromServer) -> ChatResult<()> {
+    pub async fn send(&self, packet: FromServer) -> ChatResult<()> {
         let mut guard = self.0.lock().await;
         utils::send_as_json(&mut *guard, &packet).await?;
         guard.flush().await?;

@@ -13,7 +13,7 @@ impl GroupTable {
         self.0.lock().unwrap().get(group_name).cloned()
     }
 
-    pub fn get_or_create(&mut self, group_name: Arc<String>) -> Arc<Group> {
+    pub fn get_or_create(&self, group_name: Arc<String>) -> Arc<Group> {
         self.0
             .lock()
             .unwrap()

@@ -13,7 +13,7 @@ fn main() -> ChatResult<()> {
 
     let chat_group_table = Arc::new(group_table::GroupTable::new());
 
-    async_std::block_on(async {
+    async_std::task::block_on(async {
         use async_std::{net, task};
 
         let listener = net::TcpListener::bind(address).await?;
