@@ -26,7 +26,7 @@ async fn send_commands(mut to_server: net::TcpStream) -> ChatResult<()> {
             None => continue,
         };
 
-        println!("request: {:?}", request);
+        //println!("request: {:?}", request);
 
         utils::send_as_json(&mut to_server, &request).await?;
         to_server.flush().await?;
@@ -34,7 +34,6 @@ async fn send_commands(mut to_server: net::TcpStream) -> ChatResult<()> {
     Ok(())
 }
 
-//todo: this is not ready
 fn parse_command(line: &str) -> Option<FromClient> {
     match line.split_once(' ') {
         None => None,
